@@ -1,0 +1,53 @@
+<%- include('../../partials/head.ejs') %>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2"><%- include('../../partials/sidebar.ejs') %></div>
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-md-8 offset-md-2">
+          <div class="card card-body m-3">
+            <h4>Your Recent Comments</h4>
+            <div class="mt-5" id="comment-holder">
+                <% if (comments.length === 0) { %>
+                  <p class="text-center text-muted">There is no comment</p>
+                  <% } else { %> 
+                    <% comments.reverse().map(comment => { %>
+                      <div class="media border p-2">
+                        <img src="<%= comment.user.profilePics %> " alt="Profile Pics" class="rounded-circle my-3 mx-3" style="width: 40px;" />
+                        <div class="my-3 media-body">
+                          <p class="text-muted">On post <strong><%= comment.post.title %> </strong> By <a href="/author/<%= `${comment.user._id}` %> "><%= comment.user.username %> </a>, <%= moment(comment.createdAt) %> </p>
+                          <p><%= comment.body %></p>
+                          <div class="replies">
+                            <% if (comment.replies.length > 0) { %> 
+                              <% comment.replies.map(reply => { %> 
+                                <div class="media mt-3">
+                                  <img src="<%= reply.user.profilePics %> " alt="Profile Pics" class="rounded-circle align-self-start mr-3" style="width: 40px;" />
+                                  <div class="media-body">
+                                    <p><%= reply.body %></p>
+                                  </div>
+                                </div>
+                              <% }) %> 
+                            <% } %> 
+                            <div class="my-3">
+                              <input type="text" class="form-control" placeholder="Press enter to reply" data-comment="<%= comment._id %> " />
+                            </div>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    <% }) %> 
+                  <% } %> 
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer.ejs') %>
+
+<script src="/scripts/comment.js"></script>
+</body>
+</html>

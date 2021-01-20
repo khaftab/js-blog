@@ -1,0 +1,102 @@
+<%- include('../../partials/head.ejs') %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <section class="mb-5">
+        <a
+          href="/explorer?filter=latest"
+          class="btn <%= filter==='latest' ? 'btn-primary' : 'btn-secondary' %>"
+        >
+          Latest
+        </a>
+        <a
+          href="/explorer?filter=week"
+          class="btn <%= filter==='week' ? 'btn-primary' : 'btn-secondary' %>"
+        >
+          Week
+        </a>
+        <a
+          href="/explorer?filter=month"
+          class="btn <%= filter==='month' ? 'btn-primary' : 'btn-secondary' %>"
+        >
+          Month
+        </a>
+        <a
+          href="/explorer?filter=all"
+          class="btn <%= filter==='all' ? 'btn-primary' : 'btn-secondary' %>"
+        >
+          All
+        </a>
+      </section>
+      <section>
+        <% if (posts.length === 0) { %>
+        <p class="text-center text-muted">There is nothing to show</p>
+        <% } else { %> <% posts.map(post => { %>
+        <div class="card card-body mb-3">
+          <% if (post.thumbnail) { %>
+          <img
+            src="<%= post.thumbnail %> "
+            alt="<%= post.title %>"
+            class="img-fluid mb-2"
+          />
+          <% } %>
+          <a href="/explorer/<%= post._id %> " style="color: #222">
+            <h5><%= post.title %></h5>
+            <p class="mb-4"><%= truncate(post.body) %></p>
+          </a>
+          <div class="d-flex">
+            <small>
+              <%= moment(post.createdAt) %> , Posted By <a href="<%= `/author/${post.author._id}` %> " target="_blank"><%= post.author.username %> </a>, <%= post.readTime %>
+            </small>
+
+            <% if (user) { %>
+            <span class="ml-auto bookmark" data-post="<%= post._id %> "> 
+              <% if (bookmarks.includes(post._id)) { %>
+               <i class="fas fa-bookmark"></i>
+              <% } else {%>
+                <i class="far fa-bookmark"></i>
+              <% } %> 
+            </span>
+            <% } %>
+          </div>
+        </div>
+        <% }) %> <% } %>
+      </section>
+      <nav class="d-flex flex-row justify-content-center">
+        <ul class="pagination">
+          <li class="page-item <%= currentPage === 1 && 'disabled' %>">
+            <a
+              href="<%= `/explorer/?filter=${filter}&page=${currentPage - 1}` %> "
+              class="page-link"
+              >Previous</a
+            >
+          </li>
+          <% for(let i = 1; i <= totalPage; i++) {%>
+          <li class="page-item <%= currentPage === i && 'active' %>">
+            <a
+              href="<%= `/explorer/?filter=${filter}&page=${i}` %> "
+              class="page-link"
+              ><%= i %>
+            </a>
+          </li>
+          <% } %>
+          <li class="page-item <%= totalPage <= currentPage && 'disabled' %>">
+            <a
+              href="<%= `/explorer/?filter=${filter}&page=${currentPage + 1}` %> "
+              class="page-link"
+              >Next</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer.ejs') %>
+
+<script src="/scripts/bookmarks.js"></script>
+
+<body/>
+<html/>

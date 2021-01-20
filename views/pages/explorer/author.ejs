@@ -1,0 +1,84 @@
+<%- include('../../partials/head.ejs') %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card card-body my-3">
+        <div class="my-3">
+          <img
+            src="<%= author.profilePics %> "
+            alt="Profile Pics"
+            class="img-thumbnail img-fluid"
+          />
+        </div>
+        <div>
+          <p>Name: <strong><%= author.profile.name %> </strong></p>
+          <p>Title: <strong><%= author.profile.title %> </strong></p>
+          <p>Bio:</p>
+          <p><%= author.profile.bio %></p>
+        </div>
+
+        <div>
+          Social Links <% if (author.profile.links.website) { %>
+          <span>
+            <a href="<%= author.profile.links.website %> " target="_blank">
+              <i class="fas fa-internet-explorer"></i>
+            </a>
+          </span>
+          <% } %> <% if (author.profile.links.facebook) { %>
+          <span>
+            <a href="<%= author.profile.links.facebook %> " target="_blank">
+              <i class="fab fa-facebook-square"></i>
+            </a>
+          </span>
+          <% } %> <% if (author.profile.links.twitter) { %>
+          <span>
+            <a href="<%= author.profile.links.twitter %> " target="_blank">
+              <i class="fab fa-twitter-explorer"></i>
+            </a>
+          </span>
+          <% } %> <% if (author.profile.links.github) { %>
+          <span>
+            <a href="<%= author.profile.links.github %> " target="_blank">
+              <i class="fab fa-github-explorer"></i>
+            </a>
+          </span>
+          <% } %>
+        </div>
+        <h5 class="my-2">Posts created by <%= author.profile.name %></h5>
+        <div class="my-2">
+          <div class="row  d-flex justify-content-center">
+            <% if (author.profile.posts.length === 0 ) { %>
+            <p class="text-center text-muted">There no post created!</p>
+            <% } else { %> <% author.profile.posts.map(post => { %>
+
+            <div class="card col-sm-5 m-3">
+              <% if (post.thumbnail) { %>
+                <img
+                src="<%= post.thumbnail %> "
+                alt="<%= post.title %> "
+                class="card-img-top mt-3 "
+              />
+              <% } %>
+              <div class="card-body p-0">
+                <a href="<%= `/explorer/${post._id}` %> " target="_blank" style="color: #222;"
+                    ><p class="mt-3"><%= post.title %></p></a
+                  >
+              </div>
+              
+            </div>
+
+            <% }) %> <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer.ejs') %>
+
+<script src="/scripts/bookmarks.js"></script>
+
+<body/>
+<html/>

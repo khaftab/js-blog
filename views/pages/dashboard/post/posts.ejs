@@ -1,0 +1,47 @@
+<%- include('../../../partials/head.ejs') %>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2"><%- include('../../../partials/sidebar.ejs') %></div>
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-md-8 offset-md-2">
+          <div class="card card-body">
+            <h3 class="my-4 text-center">List Of My Posts</h3>
+            <div class="row">
+              <% if (posts.length === 0) { %>
+              <div class="text-center text-muted my-3 mx-3">
+                <p>There is no post available now</p>
+                <a href="/posts/create" class="btn btn-primary btn-sm"
+                  >Create Post Now</a
+                >
+              </div>
+              <% } else {%> <% posts.reverse().map(post => { %>
+              <!--reverse is a array method to reverse the array-->
+              <div class="card col-sm-3 m-3">
+                <% if (post.thumbnail) { %>
+                <img
+                  src="<%= post.thumbnail %> "
+                  alt="<%= post.title %> "
+                  class="card-img-top mt-3"
+                />
+                <% } %>
+                <div class="card-body">
+                  <a href="/posts/edit/<%= post._id %>" style="color: #222"
+                    ><%= post.title %>
+                  </a>
+                </div>
+              </div>
+              <% }) %> <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../../partials/footer.ejs') %>
+
+</body>
+</html>

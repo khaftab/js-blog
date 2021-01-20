@@ -1,0 +1,56 @@
+<%- include('../../partials/head.ejs') %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+     <h4 class="my-4">Search Result for - <%= searchTerm %> </h4>
+
+     <% if (posts.length === 0) { %>
+      <p>Nothing found</p>
+     <% } else { %>
+      <% posts.map(post => { %> 
+          <div class="card card-body my-3">
+            <a href="/explorer/<%= post._id %> " style="color: #222;">
+              <%= post.title  %>
+              <p><%= truncate(post.body) %> </p> 
+            </a>
+          </div>
+      <% }) %> 
+     <% }  %> 
+      <nav class="d-flex flex-row justify-content-center">
+        <ul class="pagination">
+          <li class="page-item <%= currentPage === 1 && 'disabled' %>">
+            <a
+              href="<%= `/search/term=${searchTerm}&page=${currentPage - 1} `%> "
+              class="page-link"
+              >Previous</a
+            >
+          </li>
+          <% for(let i = 1; i <= totalPage; i++) {%>
+          <li class="page-item <%= currentPage === i && 'active' %>">
+            <a
+              href="<%= `/search/term=${searchTerm}&page=${i}` %> "
+              class="page-link"
+              ><%= i %>
+            </a>
+          </li>
+          <% } %>
+          <li class="page-item <%= totalPage <= currentPage && 'disabled' %>">
+            <a
+              href="<%= `/search/term=${searchTerm}&page=${currentPage + 1}` %> "
+              class="page-link"
+              >Next</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/footer.ejs') %>
+
+<script src="/scripts/bookmarks.js"></script>
+
+<body/>
+<html/>

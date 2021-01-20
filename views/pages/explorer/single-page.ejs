@@ -1,0 +1,105 @@
+<%- include('../../partials/head.ejs') %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card card-body my-4">
+         <section>
+          <h3><%= post.title %></h3>
+          <div class="d-flex">
+            <small>
+              <%= moment(post.createdAt) %> , Posted By <a href="<%= `/author/${post.author._id}` %> " target="_blank"><%= post.author.username %> </a>, <%= post.readTime %>
+            </small>
+
+            <% if (user) { %>
+            <span class="ml-auto bookmark" data-post="<%= post._id %> ">
+              <% if (bookmarks.includes(post._id)) { %>
+              <i class="fas fa-bookmark"></i>
+              <% } else {%>
+              <i class="far fa-bookmark"></i>
+              <% } %>
+            </span>
+            <% } %>
+          </div>
+        </section> 
+        <% if (post.thumbnail) { %>
+        <img
+          src="<%= post.thumbnail %> "
+          alt="<%= post.title %>"
+          class="img-fluid my-2"
+        />
+        <% } %>
+        <section class="my-3"><%- post.body %></section> 
+         <section>
+          <% if (!user) { %>
+          <button class="btn btn-success btn-sm" disabled>
+            Like ( <%= post.likes.length %> )
+          </button>
+          <button class="btn btn-danger btn-sm" disabled>
+            Disike ( <%= post.dislikes.length %> )
+          </button>
+          <p class="text-center text-muted mt-5">
+            To like and comment pls login <a href="/auth/login">Login</a>
+          </p>
+          <% }  else { %>
+            <button class="btn btn-success btn-sm" id="likeBtn" data-post="<%= post._id %> ">
+            <%= post.likes.includes(user._id) ? 'Liked' : 'Like'%> ( <%= post.likes.length %> ) </button>
+            <button class="btn btn-danger btn-sm" id="dislikeBtn" data-post="<%= post._id %> ">
+            <%= post.dislikes.includes(user._id) ? 'Disiked' : 'Dislike'%> ( <%=post.dislikes.length %> )</button>
+            <div class="mt-5">
+              <label for="comment">Comment</label>
+              <input
+                type="text"
+                id="comment"
+                class="form-control"
+                data-post="<%= post._id %> "
+                placeholder="Enter to submit"
+              />
+            </div>
+            <div class="mt-5" id="comment-holder">
+              <% if (post.comments.length === 0) { %>
+                <p class="text-center text-muted">There is no comment</p>
+                <% } else { %> 
+                  <% post.comments.reverse().map(comment => { %>
+                    <div class="media border">
+                      <img src="<%= comment.user.profilePics %> " alt="Profile Pics" class="rounded-circle my-3 mx-3" style="width: 40px;" />
+                      <div class="my-3">
+                        <p><%= comment.body %></p>
+                        <div class="replies">
+                          <% if (comment.replies.length > 0) { %> 
+                            <% comment.replies.map(reply => { %> 
+                              <div class="media mt-3">
+                                <img src="<%= reply.user.profilePics %> " alt="Profile Pics" class="rounded-circle align-self-start mr-3" style="width: 40px;" />
+                                <div class="media-body">
+                                  <p><%= reply.body %></p>
+                                </div>
+                              </div>
+                            <% }) %> 
+                          <% } %> 
+                          <div class="my-3">
+                            <input type="text" class="form-control" placeholder="Press enter to reply" data-comment="<%= comment._id %> " />
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  <% }) %> 
+                <% } %> 
+            </div>
+          <% }  %> 
+         
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<%- include('../../partials/footer.ejs') %>
+
+<script src="/scripts/bookmarks.js"></script>
+<script src="/scripts/likeDislike.js"></script>
+<script src="/scripts/comment.js"></script>
+
+</body>
+ </html>
